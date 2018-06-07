@@ -98,6 +98,7 @@ h1 {
   left: 50%;
   float: left;
   margin-bottom: 50px;
+  clear: both;
 }
 #pagination {
   position: relative;
