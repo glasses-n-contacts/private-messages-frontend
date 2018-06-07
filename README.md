@@ -9,4 +9,8 @@ Display this organization's messages with a Vue frontend using the Flask backend
 
 ## Features
 
-Currently all text messages are displayed at once without attachments.
+- Text Messages
+- Image Attachments
+- File Attachments
+- Tooltips for Delivered Times
+- Pagination
