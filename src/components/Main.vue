@@ -9,7 +9,7 @@
       <ul class="message-list">
         <li class="message-listitem" v-for="(item, index) in paginated('items')" v-bind:key='index'>
           <div class="message-box" v-bind:class='item.messager ? "message-me" : "message-other"'>
-            {{ item.message }}
+            <Message v-bind:item="item" />
           </div>
         </li>
       </ul>
@@ -33,12 +33,18 @@ import Vue from 'vue'
 const VuePaginate = require('vue-paginate')
 Vue.use(VuePaginate)
 
+import Message from './Message.vue'
+
 export default {
   data() {
     return {
       items: [],
       paginate: ['items']
     }
+  },
+
+  components: {
+    Message
   },
 
   mounted() {

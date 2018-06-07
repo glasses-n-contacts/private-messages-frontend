@@ -1,0 +1,41 @@
+<template>
+  <div class="tooltip">
+    {{item.message}}
+    <span class="tooltiptext">{{item.date_delivered}}</span>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "message",
+  props: ["item"]
+};
+</script>
+
+<style>
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
