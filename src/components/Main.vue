@@ -7,10 +7,12 @@
       :per="50"
     >
       <ul class="message-list">
-        <li class="message-listitem" v-for="(item, index) in paginated('items')" v-bind:key='index'>
-          <div class="message-box" v-bind:class='item.messager ? "message-me" : "message-other"'>
-            <Message v-bind:item="item" />
-          </div>
+        <li
+          class="message-listitem"
+          v-for="(item, index) in paginated('items')"
+          v-bind:key='index'
+        >
+          <Message v-bind:item="item" />
         </li>
       </ul>
     </paginate>
@@ -28,32 +30,48 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Vue from 'vue'
-const VuePaginate = require('vue-paginate')
-Vue.use(VuePaginate)
+import axios from 'axios';
+import Vue from 'vue';
+const VuePaginate = require('vue-paginate');
+Vue.use(VuePaginate);
 
-import Message from './Message.vue'
+import Message from './Message.vue';
 
 export default {
   data() {
     return {
       items: [],
-      paginate: ['items']
-    }
+      paginate: ['items'],
+    };
   },
 
   components: {
-    Message
+    Message,
   },
 
   mounted() {
     axios.get('http://localhost:5000/imessages')
       .then(res => {
-        this.items = res.data
-      })
-  }
-}
+        const messages = res.data;
+        const reactions = messages.filter(message => message.reaction);
+        const contents = messages.filter(message => !message.reaction);
+        console.log(contents.length);
+        reactions.forEach(reaction => {
+          const corr = contents.filter(content => {
+            return reaction.associated_message_guid.indexOf(content.guid) > -1;
+          })[0];
+          if (corr) {
+            if (!corr.reactions) {
+              corr.reactions = [reaction];
+            } else {
+              corr.reactions.push(reaction);
+            }
+          }
+        });
+        this.items = contents;
+      });
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -65,6 +83,7 @@ export default {
 h1 {
   text-align: center;
 }
+
 .message-list {
   list-style-type: none;
   padding: 0;
@@ -72,26 +91,13 @@ h1 {
   display: block;
   margin: 0 auto;
 }
-.message-me {
-  background-color: rgb(118, 70, 255);
-  color: white;
-  float: right;
-}
-.message-other {
-  background-color: #f1f0f0;
-}
-.message-box {
-  max-width: 60%;
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 15px;
-  margin: 6px;
-}
+
 .message-listitem {
   display: block;
   margin: 0 10px;
   clear: both;
 }
+
 #pagination-container {
   position: relative;
   left: 50%;
@@ -99,14 +105,17 @@ h1 {
   margin-bottom: 50px;
   clear: both;
 }
+
 #pagination {
   position: relative;
   left: -50%;
   float: left;
 }
+
 ul.paginate-links {
   margin-top: 60px;
 }
+
 ul.paginate-links > li {
   display: inline-block;
   margin: 0 10px;
@@ -114,6 +123,7 @@ ul.paginate-links > li {
   width: 15px;
   user-select: none;
 }
+
 ul.paginate-links > li.active {
   font-weight: bold
 }
