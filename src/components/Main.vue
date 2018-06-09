@@ -73,16 +73,15 @@ h1 {
   margin: 0 auto;
 }
 .message-me {
-  text-align: right;
   background-color: rgb(118, 70, 255);
   color: white;
   float: right;
 }
 .message-other {
-  text-align: left;
   background-color: #f1f0f0;
 }
 .message-box {
+  max-width: 60%;
   display: inline-block;
   padding: 6px 12px;
   border-radius: 15px;
