@@ -1,4 +1,5 @@
 # private-messages-frontend
+
 Display this organization's messages with a Vue frontend using the Flask backend in message-analyzer
 
 ## Start
@@ -14,3 +15,4 @@ Display this organization's messages with a Vue frontend using the Flask backend
 - File Attachments
 - Tooltips for Delivered Times
 - Pagination
+- Reactions Overlay
