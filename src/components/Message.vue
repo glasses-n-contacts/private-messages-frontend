@@ -48,7 +48,12 @@ export default {
     },
     type() {
       if (this.attachmentLink) {
-        const arr = this.attachmentLink.split('.');
+        let link = this.attachmentLink;
+        if (link.includes('?')) {
+          link = link.substring(0, link.indexOf('?'));
+        }
+
+        const arr = link.split('.');
         const imageFormats = ['jpeg', 'jpg', 'gif', 'png'];
         if (imageFormats.includes(arr[arr.length - 1].toLowerCase())) {
           return 'image';
