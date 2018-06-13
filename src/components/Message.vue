@@ -15,12 +15,18 @@
     </div>
     <div v-if="item.attachment">
       <img
-        v-on:click="clickImage"
-        class="attachment"
         v-if="type==='image'"
+        v-on:click="clickFile"
+        class="attachment"
         v-bind:src="attachmentLink"
       />
-      <a v-else v-bind:href="attachmentLink">{{attachmentLink}}</a>
+      <a
+        v-else
+        href="javascript:void(0)"
+        v-on:click="clickFile"
+      >
+        {{attachmentFilename}}
+      </a>
     </div>
     <span class="tooltiptext">{{item.date_delivered}}</span>
   </div>
@@ -36,9 +42,13 @@ export default {
     attachmentLink() {
       return this.item.attachment;
     },
+    attachmentFilename() {
+      return this.attachmentLink
+        .substring(this.item.attachment.lastIndexOf('/') + 1);
+    },
     type() {
-      if (this.item.attachment) {
-        const arr = this.item.attachment.split('.');
+      if (this.attachmentLink) {
+        const arr = this.attachmentLink.split('.');
         const imageFormats = ['jpeg', 'jpg', 'gif', 'png'];
         if (imageFormats.includes(arr[arr.length - 1].toLowerCase())) {
           return 'image';
@@ -64,7 +74,7 @@ export default {
     },
   },
   methods: {
-    clickImage() {
+    clickFile() {
       const win = window.open(this.attachmentLink, '_blank');
       win.focus();
     },
