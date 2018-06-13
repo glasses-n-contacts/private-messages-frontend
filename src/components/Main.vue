@@ -53,8 +53,8 @@ export default {
     axios.get('http://localhost:5000/all_detailed')
       .then(res => {
         const messages = res.data;
-        const reactions = messages.filter(message => message.reaction);
-        const contents = messages.filter(message => !message.reaction);
+        const reactions = messages.filter(message => message.is_reaction);
+        const contents = messages.filter(message => !message.is_reaction);
         console.log(contents.length);
         reactions.forEach(reaction => {
           const corr = contents.filter(content => {

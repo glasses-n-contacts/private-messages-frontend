@@ -1,7 +1,7 @@
 <template>
   <div
     class="tooltip message-box"
-    v-bind:class='item.messager ? "message-me" : "message-other"'
+    v-bind:class='item.is_from_me ? "message-me" : "message-other"'
   >
     <div v-if="item.message && item.message !== '\ufffc'">
       {{item.message}}
