@@ -34,7 +34,7 @@ export default {
   props: ['item'],
   computed: {
     attachmentLink() {
-      return `http://localhost:5000/attachments/${this.item.attachment}`;
+      return this.item.attachment;
     },
     type() {
       if (this.item.attachment) {
@@ -51,6 +51,10 @@ export default {
         return [];
       }
       return this.item.reactions.map(reaction => {
+        if (reaction.hasEmoji) {
+          return reaction;
+        }
+
         const emoji = emojis[reaction.message.split(' ')[0]];
         return {
           ...reaction,

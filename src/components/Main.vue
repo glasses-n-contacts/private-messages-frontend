@@ -1,6 +1,6 @@
 <template>
   <div class="messages">
-    <h1>Bill Lucy iMessages</h1>
+    <h1>Bill Lucy Messages</h1>
     <paginate
       name="items"
       :list="items"
@@ -50,7 +50,7 @@ export default {
   },
 
   mounted() {
-    axios.get('http://localhost:5000/imessages')
+    axios.get('http://localhost:5000/all_detailed')
       .then(res => {
         const messages = res.data;
         const reactions = messages.filter(message => message.reaction);
