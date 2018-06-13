@@ -72,7 +72,6 @@ h1 {
   list-style-type: none;
   padding: 0;
   width: 80%;
-  display: block;
   margin: 0 auto;
 }
 
@@ -94,6 +93,10 @@ h1 {
   position: relative;
   left: -50%;
   float: left;
+}
+
+ul {
+  -webkit-padding-start: 0;
 }
 
 ul.paginate-links {

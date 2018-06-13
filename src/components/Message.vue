@@ -13,20 +13,10 @@
     >
       {{reaction.emoji}}
     </div>
-    <div v-if="item.attachment">
-      <img
-        v-if="type==='image'"
-        v-on:click="clickFile"
-        class="attachment"
-        v-bind:src="attachmentLink"
-      />
-      <a
-        v-else
-        href="javascript:void(0)"
-        v-on:click="clickFile"
-      >
-        {{attachmentFilename}}
-      </a>
+    <div
+      v-for="(attachment, index) in item.attachments"
+      v-bind:key="index">
+      <Attachment v-bind:item="attachment" />
     </div>
     <span class="tooltiptext">{{item.date_delivered}}</span>
   </div>
@@ -35,32 +25,15 @@
 <script>
 const emojis = require('../emojis');
 
+import Attachment from './Attachment.vue';
+
 export default {
   name: 'message',
   props: ['item'],
+  components: {
+    Attachment,
+  },
   computed: {
-    attachmentLink() {
-      return this.item.attachment;
-    },
-    attachmentFilename() {
-      return this.attachmentLink
-        .substring(this.item.attachment.lastIndexOf('/') + 1);
-    },
-    type() {
-      if (this.attachmentLink) {
-        let link = this.attachmentLink;
-        if (link.includes('?')) {
-          link = link.substring(0, link.indexOf('?'));
-        }
-
-        const arr = link.split('.');
-        const imageFormats = ['jpeg', 'jpg', 'gif', 'png'];
-        if (imageFormats.includes(arr[arr.length - 1].toLowerCase())) {
-          return 'image';
-        }
-        return 'file';
-      }
-    },
     reactions() {
       if (!this.item.reactions) {
         return [];
@@ -76,12 +49,6 @@ export default {
           emoji,
         };
       });
-    },
-  },
-  methods: {
-    clickFile() {
-      const win = window.open(this.attachmentLink, '_blank');
-      win.focus();
     },
   },
 };
