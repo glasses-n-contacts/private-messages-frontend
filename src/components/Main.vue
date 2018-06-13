@@ -50,7 +50,7 @@ export default {
   },
 
   mounted() {
-    axios.get('http://localhost:5000/messenger')
+    axios.get('http://localhost:5000/all_detailed')
       .then(res => {
         this.items = res.data;
       });
