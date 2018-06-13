@@ -61,7 +61,7 @@ export default {
         return [];
       }
       return this.item.reactions.map(reaction => {
-        if (reaction.hasEmoji) {
+        if (reaction.has_emoji) {
           return reaction;
         }
 
