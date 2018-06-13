@@ -50,25 +50,9 @@ export default {
   },
 
   mounted() {
-    axios.get('http://localhost:5000/all_detailed')
+    axios.get('http://localhost:5000/messenger')
       .then(res => {
-        const messages = res.data;
-        const reactions = messages.filter(message => message.is_reaction);
-        const contents = messages.filter(message => !message.is_reaction);
-        console.log(contents.length);
-        reactions.forEach(reaction => {
-          const corr = contents.filter(content => {
-            return reaction.associated_message_guid.indexOf(content.guid) > -1;
-          })[0];
-          if (corr) {
-            if (!corr.reactions) {
-              corr.reactions = [reaction];
-            } else {
-              corr.reactions.push(reaction);
-            }
-          }
-        });
-        this.items = contents;
+        this.items = res.data;
       });
   },
 };
