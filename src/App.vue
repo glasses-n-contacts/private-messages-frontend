@@ -5,7 +5,7 @@
         <img src="./assets/logo.png" height='200px' width='auto' />
       </div>
       <Main />
-    </v-content>>
+    </v-content>
   </v-app>
 </template>
 
