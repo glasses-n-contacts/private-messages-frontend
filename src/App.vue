@@ -1,9 +1,11 @@
 <template>
   <v-app id="app">
-    <div>
-      <img src="./assets/logo.png" height='200px' width='auto' />
-    </div>
-    <Main />
+    <v-content>
+      <div>
+        <img src="./assets/logo.png" height='200px' width='auto' />
+      </div>
+      <Main />
+    </v-content>>
   </v-app>
 </template>
 
@@ -28,6 +30,12 @@ export default {
   color: #2c3e50;
   background-color: white;
   padding-top: 40px;
+}
+
+@media screen and (max-width: 500px) {
+  #app {
+    font-size: 14px;
+  }
 }
 
 html {

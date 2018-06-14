@@ -1,20 +1,36 @@
 <template>
-  <div class="messages">
+  <v-container fluid class="messages">
     <h1>Bill Lucy Messages</h1>
+    <v-layout row justify-center>
+      <v-flex xs12 sm10 md8>
+        <v-text-field
+          id="search"
+          name="search"
+          label="Message Text"
+          append-icon="fa-search"
+          v-model="searchText"
+          :change="changeSearch"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
     <paginate
       name="filteredItems"
       :list="filteredItems"
       :per="50"
     >
-      <ul class="message-list">
-        <li
-          class="message-listitem"
-          v-for="(item, index) in paginated('filteredItems')"
-          v-bind:key='index'
-        >
-          <Message v-bind:item="item" />
-        </li>
-      </ul>
+      <v-layout row justify-center>
+        <v-flex xs12 sm10 md8>
+        <ul class="message-list">
+          <li
+            class="message-listitem"
+            v-for="(item, index) in paginated('filteredItems')"
+            v-bind:key='index'
+          >
+            <Message v-bind:item="item" />
+          </li>
+        </ul>
+        </v-flex>
+      </v-layout>
     </paginate>
 
     <div id="pagination-container">
@@ -26,7 +42,7 @@
         />
       </div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -40,6 +56,7 @@ import Message from './Message.vue';
 export default {
   data() {
     return {
+      searchText: '',
       items: [],
       filteredItems: [],
       paginate: ['filteredItems'],
@@ -57,6 +74,12 @@ export default {
         this.filteredItems = res.data;
       });
   },
+
+  methods: {
+    changeSearch: function(event) {
+      console.log(event);
+    },
+  },
 };
 </script>
 
@@ -73,8 +96,6 @@ h1 {
 .message-list {
   list-style-type: none;
   padding: 0;
-  width: 80%;
-  margin: 0 auto;
 }
 
 .message-listitem {

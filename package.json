@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "vue": "^2.5.16",
+    "vue-material-design-icons": "^1.5.1",
     "vue-paginate": "^3.6.0",
     "vuetify": "^1.0.19"
   },

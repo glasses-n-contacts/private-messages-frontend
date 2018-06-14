@@ -51,6 +51,7 @@ export default {
 
 <style>
 img.attachment {
+  width: 100%;
   max-width: 250px;
   height: auto;
   cursor: pointer;
