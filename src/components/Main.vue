@@ -2,14 +2,14 @@
   <div class="messages">
     <h1>Bill Lucy Messages</h1>
     <paginate
-      name="items"
-      :list="items"
+      name="filteredItems"
+      :list="filteredItems"
       :per="50"
     >
       <ul class="message-list">
         <li
           class="message-listitem"
-          v-for="(item, index) in paginated('items')"
+          v-for="(item, index) in paginated('filteredItems')"
           v-bind:key='index'
         >
           <Message v-bind:item="item" />
@@ -20,7 +20,7 @@
     <div id="pagination-container">
       <div id="pagination">
         <paginate-links
-          for="items"
+          for="filteredItems"
           :limit="4"
           :show-step-links="true"
         />
@@ -41,7 +41,8 @@ export default {
   data() {
     return {
       items: [],
-      paginate: ['items'],
+      filteredItems: [],
+      paginate: ['filteredItems'],
     };
   },
 
@@ -53,6 +54,7 @@ export default {
     axios.get('http://localhost:5000/all_detailed')
       .then(res => {
         this.items = res.data;
+        this.filteredItems = res.data;
       });
   },
 };

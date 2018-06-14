@@ -1,8 +1,10 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png" height='200px' width='auto' />
+  <v-app id="app">
+    <div>
+      <img src="./assets/logo.png" height='200px' width='auto' />
+    </div>
     <Main />
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -19,10 +21,16 @@ export default {
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: white;
+  padding-top: 40px;
+}
+
+html {
+  background-color: white;
 }
 </style>
