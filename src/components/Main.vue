@@ -9,7 +9,7 @@
           label="Message Text"
           append-icon="fa-search"
           v-model="searchText"
-          :change="changeSearch"
+          v-on:input="changeSearch"
         ></v-text-field>
       </v-flex>
     </v-layout>
@@ -77,7 +77,13 @@ export default {
 
   methods: {
     changeSearch: function(event) {
-      console.log(event);
+      if (!this.searchText) {
+        this.filteredItems = this.items;
+      }
+
+      this.filteredItems = this.items.filter(item => {
+        return item.message.includes(this.searchText);
+      });
     },
   },
 };
