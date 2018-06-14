@@ -4,4 +4,5 @@ module.exports = {
   Disliked: '👎',
   Emphasized: '❗️',
   Loved: '❤️',
+  Questioned: '❓',
 };
