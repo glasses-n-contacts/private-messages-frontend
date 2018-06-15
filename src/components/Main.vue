@@ -9,7 +9,7 @@
           label="Message Text"
           append-icon="fa-search"
           v-model="searchText"
-          v-on:input="changeSearch"
+          @input="changeSearch"
         ></v-text-field>
       </v-flex>
     </v-layout>
@@ -17,6 +17,7 @@
       name="filteredItems"
       :list="filteredItems"
       :per="50"
+      ref="paginator"
     >
       <v-layout row justify-center>
         <v-flex xs12 sm10 md8>
@@ -33,15 +34,27 @@
       </v-layout>
     </paginate>
 
-    <div id="pagination-container">
-      <div id="pagination">
-        <paginate-links
-          for="filteredItems"
-          :limit="4"
-          :show-step-links="true"
-        />
-      </div>
-    </div>
+    <v-layout row justify-center>
+      <v-flex xs12 sm10 md8>
+        <div id="pagination-container">
+          <div id="pagination">
+            <paginate-links
+              for="filteredItems"
+              :limit="4"
+              :show-step-links="true"
+            />
+          </div>
+        </div>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row justify-center>
+      <v-flex id="result-count" xs12 sm10 md8>
+        <span v-if="$refs.paginator">
+          Viewing {{$refs.paginator.pageItemsCount}} results
+        </span>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -82,7 +95,8 @@ export default {
       }
 
       this.filteredItems = this.items.filter(item => {
-        return item.message.includes(this.searchText);
+        return item.message.toLowerCase()
+          .includes(this.searchText.toLowerCase());
       });
     },
   },
@@ -114,7 +128,6 @@ h1 {
   position: relative;
   left: 50%;
   float: left;
-  margin-bottom: 50px;
   clear: both;
 }
 
@@ -129,7 +142,7 @@ ul {
 }
 
 ul.paginate-links {
-  margin-top: 60px;
+  margin-top: 40px;
 }
 
 ul.paginate-links > li {
@@ -142,5 +155,10 @@ ul.paginate-links > li {
 
 ul.paginate-links > li.active {
   font-weight: bold
+}
+
+#result-count {
+  text-align: center;
+  margin-bottom: 50px;
 }
 </style>
