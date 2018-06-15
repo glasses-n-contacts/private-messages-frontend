@@ -23,7 +23,8 @@
     >
       <v-layout row justify-center>
         <v-flex xs12 sm10 md8>
-          <Messages :items="paginated('filteredItems')" />
+          <SearchResults v-if="searchText" :items="paginated('filteredItems')" />
+          <Messages v-else :items="paginated('filteredItems')" />
         </v-flex>
       </v-layout>
     </paginate>
@@ -65,6 +66,7 @@ const VuePaginate = require('vue-paginate');
 Vue.use(VuePaginate);
 
 import Messages from './Messages.vue';
+import SearchResults from './SearchResults.vue';
 
 export default {
   data() {
@@ -89,6 +91,7 @@ export default {
   },
   components: {
     Messages,
+    SearchResults,
   },
   mounted() {
     axios.get('http://localhost:5000/all_detailed')
