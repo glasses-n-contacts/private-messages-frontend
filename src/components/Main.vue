@@ -8,8 +8,10 @@
           name="search"
           label="Message Text"
           append-icon="fa-search"
+          :hint="numberOfResultsText"
           v-model="searchText"
           @input="changeSearch"
+          persistent-hint
         ></v-text-field>
       </v-flex>
     </v-layout>
@@ -43,11 +45,17 @@
               :limit="4"
               :show-step-links="true"
             />
+            <input
+              type="number"
+              id="pageNum"
+              @keydown="goToPage"
+              @focus="clearInputPage"
+              :placeholder="currentPage"
+            />
           </div>
         </div>
       </v-flex>
     </v-layout>
-
     <v-layout row justify-center>
       <v-flex id="result-count" xs12 sm10 md8>
         <span v-if="$refs.paginator">
@@ -75,11 +83,21 @@ export default {
       paginate: ['filteredItems'],
     };
   },
-
+  computed: {
+    currentPage() {
+      return this.$refs.paginator
+        ? this.$refs.paginator.currentPage
+        : 1;
+    },
+    numberOfResultsText() {
+      return this.searchText
+        ? `${this.filteredItems.length} appearances of "${this.searchText}"`
+        : ``;
+    },
+  },
   components: {
     Message,
   },
-
   mounted() {
     axios.get('http://localhost:5000/all_detailed')
       .then(res => {
@@ -87,9 +105,8 @@ export default {
         this.filteredItems = res.data;
       });
   },
-
   methods: {
-    changeSearch: function(event) {
+    changeSearch(event) {
       if (!this.searchText) {
         this.filteredItems = this.items;
       }
@@ -98,6 +115,17 @@ export default {
         return item.message.toLowerCase()
           .includes(this.searchText.toLowerCase());
       });
+    },
+    goToPage(event) {
+      if (event.keyCode === 13) {
+        if (this.$refs.paginator) {
+          this.$refs.paginator.goToPage(event.target.value);
+          document.activeElement.blur();
+        }
+      }
+    },
+    clearInputPage(event) {
+      event.target.value = '';
     },
   },
 };
@@ -120,7 +148,7 @@ h1 {
 
 .message-listitem {
   display: block;
-  margin: 0 10px;
+  margin: 0;
   clear: both;
 }
 
@@ -143,6 +171,7 @@ ul {
 
 ul.paginate-links {
   margin-top: 40px;
+  display: inline-block;
 }
 
 ul.paginate-links > li {
@@ -160,5 +189,25 @@ ul.paginate-links > li.active {
 #result-count {
   text-align: center;
   margin-bottom: 50px;
+}
+
+#pageNum {
+  border-style: inset;
+  border-color: #00000038;
+  border-width: 1px;
+  border-radius: 5px;
+  width: 50px;
+  text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: black;
+  opacity: 0.3; /* Firefox */
 }
 </style>
