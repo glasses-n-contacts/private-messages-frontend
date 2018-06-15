@@ -3,7 +3,7 @@
     v-if="type==='image'"
     v-on:click="clickFile"
     class="attachment"
-    v-bind:src="attachmentLink"
+    :src="attachmentLink"
   />
   <a
     v-else

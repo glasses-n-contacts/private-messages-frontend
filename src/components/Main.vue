@@ -23,15 +23,7 @@
     >
       <v-layout row justify-center>
         <v-flex xs12 sm10 md8>
-        <ul class="message-list">
-          <li
-            class="message-listitem"
-            v-for="(item, index) in paginated('filteredItems')"
-            v-bind:key='index'
-          >
-            <Message v-bind:item="item" />
-          </li>
-        </ul>
+          <Messages :items="paginated('filteredItems')" />
         </v-flex>
       </v-layout>
     </paginate>
@@ -72,7 +64,7 @@ import Vue from 'vue';
 const VuePaginate = require('vue-paginate');
 Vue.use(VuePaginate);
 
-import Message from './Message.vue';
+import Messages from './Messages.vue';
 
 export default {
   data() {
@@ -96,7 +88,7 @@ export default {
     },
   },
   components: {
-    Message,
+    Messages,
   },
   mounted() {
     axios.get('http://localhost:5000/all_detailed')

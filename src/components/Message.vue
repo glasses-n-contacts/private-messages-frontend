@@ -1,7 +1,7 @@
 <template>
   <div
     class="tooltip message-box"
-    v-bind:class='item.is_from_me ? "message-me" : "message-other"'
+    :class='item.is_from_me ? "message-me" : "message-other"'
   >
     <div v-if="item.message && item.message !== '\ufffc'">
       {{item.message}}
@@ -9,14 +9,14 @@
     <div
       class="reaction"
       v-for="(reaction, idx) in reactions"
-      v-bind:key="idx"
+      :key="idx"
     >
       {{reaction.emoji}}
     </div>
     <div
       v-for="(attachment, index) in item.attachments"
-      v-bind:key="index">
-      <Attachment v-bind:item="attachment" />
+      :key="index">
+      <Attachment :item="attachment" />
     </div>
     <span class="tooltiptext">{{item.date_delivered}}</span>
   </div>
