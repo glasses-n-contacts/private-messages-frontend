@@ -2,6 +2,7 @@
   <div
     class="tooltip message-box"
     :class='item.is_from_me ? "message-me" : "message-other"'
+    :id="item.index"
   >
     <div v-if="item.message && item.message !== '\ufffc'">
       {{item.message}}

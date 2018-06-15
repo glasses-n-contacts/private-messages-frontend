@@ -3,7 +3,7 @@
     <li
       class="message-listitem"
       v-for="(item, index) in items"
-      :key='index'
+      :key="index"
     >
       <Message :item="item" />
     </li>

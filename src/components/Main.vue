@@ -10,21 +10,28 @@
           append-icon="fa-search"
           :hint="numberOfResultsText"
           v-model="searchText"
-          @input="changeSearch"
           persistent-hint
+          :input="changeSearch"
         ></v-text-field>
       </v-flex>
     </v-layout>
     <paginate
       name="filteredItems"
       :list="filteredItems"
-      :per="50"
+      :per="messagesPerPage"
       ref="paginator"
     >
       <v-layout row justify-center>
         <v-flex xs12 sm10 md8>
-          <SearchResults v-if="searchText" :items="paginated('filteredItems')" />
-          <Messages v-else :items="paginated('filteredItems')" />
+          <SearchResults
+            v-if="searchText"
+            :items="paginated('filteredItems')"
+            :goToPageWithIndex="goToPageWithIndex"
+          />
+          <Messages
+            v-else
+            :items="paginated('filteredItems')"
+          />
         </v-flex>
       </v-layout>
     </paginate>
@@ -37,11 +44,12 @@
               for="filteredItems"
               :limit="4"
               :show-step-links="true"
+              :async="true"
             />
             <input
               type="number"
               id="pageNum"
-              @keydown="goToPage"
+              @keydown="goToPageWithInput"
               @focus="clearInputPage"
               :placeholder="currentPage"
             />
@@ -67,14 +75,15 @@ Vue.use(VuePaginate);
 
 import Messages from './Messages.vue';
 import SearchResults from './SearchResults.vue';
+const { messagesPerPage } = require('../config');
 
 export default {
   data() {
     return {
       searchText: '',
       items: [],
-      filteredItems: [],
       paginate: ['filteredItems'],
+      messagesPerPage,
     };
   },
   computed: {
@@ -88,6 +97,12 @@ export default {
         ? `${this.filteredItems.length} appearances of "${this.searchText}"`
         : ``;
     },
+    filteredItems() {
+      return this.items.filter(item => {
+        return item.message.toLowerCase()
+          .includes(this.searchText.toLowerCase());
+      });
+    },
   },
   components: {
     Messages,
@@ -97,21 +112,16 @@ export default {
     axios.get('http://localhost:5000/all_detailed')
       .then(res => {
         this.items = res.data;
-        this.filteredItems = res.data;
+        this.items.forEach((item, index) => {
+          item.index = index;
+        });
       });
   },
   methods: {
-    changeSearch(event) {
-      if (!this.searchText) {
-        this.filteredItems = this.items;
-      }
-
-      this.filteredItems = this.items.filter(item => {
-        return item.message.toLowerCase()
-          .includes(this.searchText.toLowerCase());
-      });
+    changeSearch() {
+      this.$refs.paginator.goToPage(1);
     },
-    goToPage(event) {
+    goToPageWithInput(event) {
       if (event.keyCode === 13) {
         if (this.$refs.paginator) {
           this.$refs.paginator.goToPage(event.target.value);
@@ -121,6 +131,20 @@ export default {
     },
     clearInputPage(event) {
       event.target.value = '';
+    },
+    goToPageWithIndex(index) {
+      this.searchText = '';
+      const pageIndex = Math.ceil(index / messagesPerPage + 0.5);
+      this.waitAndGoToPage(pageIndex);
+    },
+    waitAndGoToPage(pageIndex) {
+      if (this.$refs.paginator.list.length !== this.items.length) {
+        // wait 50 millisecnds then recheck
+        // the best solution I found, albeit a hack
+        setTimeout(this.waitAndGoToPage, 50, pageIndex);
+        return;
+      }
+      this.$refs.paginator.goToPage(pageIndex);
     },
   },
 };
