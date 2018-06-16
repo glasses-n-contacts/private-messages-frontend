@@ -151,7 +151,7 @@ export default {
       event.target.value = '';
     },
     goToPageWithIndex(messageIndex) {
-      const pageIndex = Math.ceil(messageIndex / messagesPerPage + 0.5);
+      const pageIndex = Math.ceil((messageIndex + 0.1) / messagesPerPage);
       this.waitAndGoToPage(pageIndex);
     },
     waitAndGoToPage(pageIndex) {
