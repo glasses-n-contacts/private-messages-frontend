@@ -1,15 +1,27 @@
-export const setDisplaySearchResults = (state, display) => {
+const setDisplaySearchResults = (state, display) => {
   state.displaySearchResults = display;
 };
 
-export const changeSearchText = (state, searchText) => {
+const changeSearchText = (state, searchText) => {
   state.searchText = searchText;
 };
 
-export const hightlightMessageWithIndex = (state, messageIndex) => {
+const setHightlightMessageIndex = (state, messageIndex) => {
   state.highlightedMessageIndex = messageIndex;
 };
 
-export const setFiltered = (state, filtered) => {
+const setFiltered = (state, filtered) => {
   state.filtered = filtered;
+};
+
+const setDisplayBanner = (state, display) => {
+  state.displayBanner = display;
+};
+
+module.exports = {
+  setDisplaySearchResults,
+  changeSearchText,
+  setHightlightMessageIndex,
+  setFiltered,
+  setDisplayBanner,
 };

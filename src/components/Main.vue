@@ -1,6 +1,10 @@
 <template>
   <v-container fluid class="messages">
     <h1>Bill Lucy Messages</h1>
+    <SearchBanner
+      :goToPageWithIndex="goToPageWithIndex"
+      :goToFirstPage="goToFirstPage"
+    />
     <Loading v-if="!this.items.length" />
     <div v-else>
       <v-layout row justify-center>
@@ -11,7 +15,7 @@
             label="Message Text"
             append-icon="fa-search"
             :hint="numberOfResultsText"
-            v-model="searchText"
+            :value="searchText"
             persistent-hint
             @input="changeSearch"
           ></v-text-field>
@@ -79,18 +83,21 @@ Vue.use(VuePaginate);
 import Messages from './list/Messages.vue';
 import SearchResults from './list/SearchResults.vue';
 import Loading from './common/Loading.vue';
+import SearchBanner from './search/SearchBanner.vue';
 const { messagesPerPage } = require('../config');
 
 export default {
   data() {
     return {
-      searchText: '',
       items: [],
       paginate: ['filteredItems'],
       messagesPerPage,
     };
   },
   computed: {
+    searchText() {
+      return this.$store.state.searchText;
+    },
     currentPage() {
       return this.$refs.paginator
         ? this.$refs.paginator.currentPage
@@ -124,6 +131,7 @@ export default {
     Messages,
     SearchResults,
     Loading,
+    SearchBanner,
   },
   mounted() {
     axios.get('http://localhost:5000/all_detailed')
@@ -135,14 +143,15 @@ export default {
       });
   },
   methods: {
-    changeSearch() {
-      this.$store.commit('changeSearchText', this.searchText);
-      if (this.searchText) {
+    changeSearch(input) {
+      this.$store.commit('changeSearchText', input);
+      this.$store.commit('setDisplayBanner', false);
+      if (input) {
         this.$store.commit('setDisplaySearchResults', true);
       } else {
         this.$store.commit('setDisplaySearchResults', false);
       }
-      this.$refs.paginator.goToPage(1);
+      this.goToFirstPage();
     },
     goToPageWithInput(event) {
       if (event.keyCode === 13) {
@@ -167,6 +176,9 @@ export default {
         return;
       }
       this.$refs.paginator.goToPage(pageIndex);
+    },
+    goToFirstPage() {
+      this.$refs.paginator.goToPage(1);
     },
   },
 };

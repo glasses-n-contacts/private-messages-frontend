@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import mutations from './mutations';
+const mutations = require('./mutations');
 
 Vue.use(Vuex);
 
@@ -10,6 +10,8 @@ const store = new Vuex.Store({
     displaySearchResults: false,
     highlightedMessageIndex: -1,
     filtered: [],
+    currentResultIndex: 0,
+    displayBanner: false,
   },
   mutations,
 });

@@ -49,7 +49,8 @@ export default {
       this.$store.commit('setDisplaySearchResults', false);
       this.goToPageWithIndex(entry.index);
       scrollToMessage(entry.index);
-      this.$store.commit('hightlightMessageWithIndex', entry.index);
+      this.$store.commit('setHightlightMessageIndex', entry.index);
+      this.$store.commit('setDisplayBanner', true);
     },
   },
 };
