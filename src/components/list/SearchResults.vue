@@ -25,6 +25,7 @@
 <script>
 import AvatarMe from '../../assets/me.jpg';
 import AvatarOther from '../../assets/other.jpg';
+import { scrollToMessage } from '../common/utils';
 
 export default {
   props: {
@@ -47,17 +48,8 @@ export default {
     onClickSearchResult(entry) {
       this.$store.commit('setDisplaySearchResults', false);
       this.goToPageWithIndex(entry.index);
-      this.scrollToMessage(entry.index);
+      scrollToMessage(entry.index);
       this.$store.commit('hightlightMessageWithIndex', entry.index);
-    },
-    scrollToMessage(messageIndex) {
-      const message = document.getElementById(messageIndex);
-      if (!message) {
-        setTimeout(this.scrollToMessage, 50, messageIndex);
-        return;
-      }
-      message.scrollIntoView();
-      window.scrollBy(0, -100);
     },
   },
 };

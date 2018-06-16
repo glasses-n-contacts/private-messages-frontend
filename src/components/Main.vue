@@ -98,18 +98,23 @@ export default {
     },
     numberOfResultsText() {
       return this.searchText
-        ? `${this.filteredItems.length} appearances of "${this.searchText}"`
+        ? `${this.filteredLength} appearances of "${this.searchText}"`
         : ``;
     },
     filteredItems() {
-      return this.displaySearchResults
-      ?
-      this.items.filter(item => {
-        return item.message.toLowerCase()
-          .includes(this.searchText.toLowerCase());
-      })
-      :
-      this.items;
+      if (this.displaySearchResults) {
+        const filtered = this.items.filter(item => {
+          return item.message.toLowerCase()
+            .includes(this.searchText.toLowerCase());
+        });
+        this.$store.commit('setFiltered', filtered);
+        return filtered;
+      }
+
+      return this.items;
+    },
+    filteredLength() {
+      return this.$store.state.filtered.length;
     },
     displaySearchResults() {
       return this.$store.state.displaySearchResults;

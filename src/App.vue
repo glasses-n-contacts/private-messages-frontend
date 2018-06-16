@@ -11,7 +11,7 @@
 
 <script>
 import Main from './components/Main.vue';
-import store from './store';
+import store from './store/index';
 
 export default {
   name: 'app',
