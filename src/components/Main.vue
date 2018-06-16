@@ -102,10 +102,14 @@ export default {
         : ``;
     },
     filteredItems() {
-      return this.items.filter(item => {
+      return this.displaySearchResults
+      ?
+      this.items.filter(item => {
         return item.message.toLowerCase()
           .includes(this.searchText.toLowerCase());
-      });
+      })
+      :
+      this.items;
     },
     displaySearchResults() {
       return this.$store.state.displaySearchResults;
@@ -128,6 +132,11 @@ export default {
   methods: {
     changeSearch() {
       this.$store.commit('changeSearchText', this.searchText);
+      if (this.searchText) {
+        this.$store.commit('setDisplaySearchResults', true);
+      } else {
+        this.$store.commit('setDisplaySearchResults', false);
+      }
       this.$refs.paginator.goToPage(1);
     },
     goToPageWithInput(event) {

@@ -15,7 +15,6 @@ const store = new Vuex.Store({
     },
     changeSearchText(state, searchText) {
       state.searchText = searchText;
-      state.displaySearchResults = true;
     },
     hightlightMessageWithIndex(state, messageIndex) {
       state.highlightedMessageIndex = messageIndex;
