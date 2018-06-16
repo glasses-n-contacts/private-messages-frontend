@@ -13,7 +13,7 @@
             :hint="numberOfResultsText"
             v-model="searchText"
             persistent-hint
-            :input="changeSearch"
+            @input="changeSearch"
           ></v-text-field>
         </v-flex>
       </v-layout>
@@ -26,7 +26,7 @@
         <v-layout row justify-center>
           <v-flex xs12 sm10 md8>
             <SearchResults
-              v-if="searchText"
+              v-if="displaySearchResults"
               :items="paginated('filteredItems')"
               :goToPageWithIndex="goToPageWithIndex"
             />
@@ -107,6 +107,9 @@ export default {
           .includes(this.searchText.toLowerCase());
       });
     },
+    displaySearchResults() {
+      return this.$store.state.displaySearchResults;
+    },
   },
   components: {
     Messages,
@@ -124,6 +127,7 @@ export default {
   },
   methods: {
     changeSearch() {
+      this.$store.commit('changeSearchText', this.searchText);
       this.$refs.paginator.goToPage(1);
     },
     goToPageWithInput(event) {
@@ -137,9 +141,8 @@ export default {
     clearInputPage(event) {
       event.target.value = '';
     },
-    goToPageWithIndex(index) {
-      this.searchText = '';
-      const pageIndex = Math.ceil(index / messagesPerPage + 0.5);
+    goToPageWithIndex(messageIndex) {
+      const pageIndex = Math.ceil(messageIndex / messagesPerPage + 0.5);
       this.waitAndGoToPage(pageIndex);
     },
     waitAndGoToPage(pageIndex) {

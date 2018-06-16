@@ -1,15 +1,21 @@
 <template>
   <v-list two-line>
     <template v-for="(entry, index) in entries">
-      <v-subheader v-if="entry.header" :key="entry.header">{{ entry.header }}</v-subheader>
-      <v-divider v-else-if="entry.divider" :inset="entry.inset" :key="index"></v-divider>
-      <v-list-tile v-else :key="index" avatar @click="goToEntryPage(entry)">
+      <!-- <v-subheader v-if="entry.header" :key="entry.header">{{ entry.header }}</v-subheader>
+      <v-divider v-else-if="entry.divider" :inset="entry.inset" :key="index"></v-divider> -->
+      <v-list-tile
+        :key="'result'+index"
+        avatar
+        @click="onClickSearchResult(entry)"
+      >
         <v-list-tile-avatar>
           <img :src="entry.src">
         </v-list-tile-avatar>
         <v-list-tile-content>
-          <v-list-tile-title v-html="entry.title"></v-list-tile-title>
-          <v-list-tile-sub-title v-html="entry.subtitle"></v-list-tile-sub-title>
+          <v-list-tile-title v-html="entry.title">
+          </v-list-tile-title>
+          <v-list-tile-sub-title v-html="entry.subtitle">
+          </v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
     </template>
@@ -38,8 +44,20 @@ export default {
     },
   },
   methods: {
-    goToEntryPage(entry) {
+    onClickSearchResult(entry) {
+      this.$store.commit('setDisplaySearchResults', false);
       this.goToPageWithIndex(entry.index);
+      this.scrollToMessage(entry.index);
+      this.$store.commit('hightlightMessageWithIndex', entry.index);
+    },
+    scrollToMessage(messageIndex) {
+      const message = document.getElementById(messageIndex);
+      if (!message) {
+        setTimeout(this.scrollToMessage, 50, messageIndex);
+        return;
+      }
+      message.scrollIntoView();
+      window.scrollBy(0, -100);
     },
   },
 };

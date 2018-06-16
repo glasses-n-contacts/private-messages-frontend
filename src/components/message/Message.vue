@@ -4,13 +4,19 @@
     :class='item.is_from_me ? "message-me" : "message-other"'
     :id="item.index"
   >
-    <div v-if="item.message && item.message !== '\ufffc'">
-      {{item.message}}
+    <div
+      v-if="item.message && item.message !== '\ufffc'"
+    >
+      <span
+        v-for="(component, index) in textComponents"
+        :key="item.index + ' ' + index"
+        v-html="component"
+      />
     </div>
     <div
       class="reaction"
       v-for="(reaction, idx) in reactions"
-      :key="idx"
+      :key="'reaction'+idx"
     >
       {{reaction.emoji}}
     </div>
@@ -24,7 +30,7 @@
 </template>
 
 <script>
-const emojis = require('../../emojis');
+const emojis = require('../common/emojis');
 
 import Attachment from './Attachment.vue';
 
@@ -35,6 +41,22 @@ export default {
     Attachment,
   },
   computed: {
+    textComponents() {
+      const message = this.item.message;
+      const search = this.$store.state.searchText;
+      if (!this.isHighlighted) {
+        return [`<span>${message}</span>`];
+      }
+      const index = message.toLowerCase().indexOf(search.toLowerCase());
+      return [
+        `<span>${message.substring(0, index)}</span>`,
+        `<span class='highlighted'>${message.substring(index, index + search.length)}</span>`,
+        `<span>${message.substring(index + search.length)}</span>`,
+      ];
+    },
+    isHighlighted() {
+      return this.$store.state.highlightedMessageIndex === this.item.index;
+    },
     reactions() {
       if (!this.item.reactions) {
         return [];
@@ -117,5 +139,12 @@ img.attachment {
 
 .message-other {
   background-color: #f1f0f0;
+}
+
+.highlighted {
+  background-color: #fc0;
+  border-radius: .3em;
+  box-shadow: 2px 0 #ffcc00, -2px 0 #fc0;
+  padding: 2px 0;
 }
 </style>

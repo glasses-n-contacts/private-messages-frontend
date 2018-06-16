@@ -11,9 +11,11 @@
 
 <script>
 import Main from './components/Main.vue';
+import store from './store';
 
 export default {
   name: 'app',
+  store,
   components: {
     Main,
   },
