@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import AvatarMe from '../assets/me.jpg';
-import AvatarOther from '../assets/other.jpg';
+import AvatarMe from '../../assets/me.jpg';
+import AvatarOther from '../../assets/other.jpg';
 
 export default {
   props: {

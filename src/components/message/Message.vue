@@ -24,7 +24,7 @@
 </template>
 
 <script>
-const emojis = require('../emojis');
+const emojis = require('../../emojis');
 
 import Attachment from './Attachment.vue';
 

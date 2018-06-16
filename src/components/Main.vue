@@ -1,69 +1,72 @@
 <template>
   <v-container fluid class="messages">
     <h1>Bill Lucy Messages</h1>
-    <v-layout row justify-center>
-      <v-flex xs12 sm10 md8>
-        <v-text-field
-          id="search"
-          name="search"
-          label="Message Text"
-          append-icon="fa-search"
-          :hint="numberOfResultsText"
-          v-model="searchText"
-          persistent-hint
-          :input="changeSearch"
-        ></v-text-field>
-      </v-flex>
-    </v-layout>
-    <paginate
-      name="filteredItems"
-      :list="filteredItems"
-      :per="messagesPerPage"
-      ref="paginator"
-    >
+    <Loading v-if="!this.items.length" />
+    <div v-else>
       <v-layout row justify-center>
         <v-flex xs12 sm10 md8>
-          <SearchResults
-            v-if="searchText"
-            :items="paginated('filteredItems')"
-            :goToPageWithIndex="goToPageWithIndex"
-          />
-          <Messages
-            v-else
-            :items="paginated('filteredItems')"
-          />
+          <v-text-field
+            id="search"
+            name="search"
+            label="Message Text"
+            append-icon="fa-search"
+            :hint="numberOfResultsText"
+            v-model="searchText"
+            persistent-hint
+            :input="changeSearch"
+          ></v-text-field>
         </v-flex>
       </v-layout>
-    </paginate>
+      <paginate
+        name="filteredItems"
+        :list="filteredItems"
+        :per="messagesPerPage"
+        ref="paginator"
+      >
+        <v-layout row justify-center>
+          <v-flex xs12 sm10 md8>
+            <SearchResults
+              v-if="searchText"
+              :items="paginated('filteredItems')"
+              :goToPageWithIndex="goToPageWithIndex"
+            />
+            <Messages
+              v-else
+              :items="paginated('filteredItems')"
+            />
+          </v-flex>
+        </v-layout>
+      </paginate>
 
-    <v-layout row justify-center>
-      <v-flex xs12 sm10 md8>
-        <div id="pagination-container">
-          <div id="pagination">
-            <paginate-links
-              for="filteredItems"
-              :limit="4"
-              :show-step-links="true"
-              :async="true"
-            />
-            <input
-              type="number"
-              id="pageNum"
-              @keydown="goToPageWithInput"
-              @focus="clearInputPage"
-              :placeholder="currentPage"
-            />
+      <v-layout row justify-center>
+        <v-flex xs12 sm10 md8>
+          <div id="pagination-container">
+            <div id="pagination">
+              <paginate-links
+                for="filteredItems"
+                :limit="4"
+                :show-step-links="true"
+                :async="true"
+              />
+              <input
+                type="number"
+                id="pageNum"
+                @keydown="goToPageWithInput"
+                @focus="clearInputPage"
+                :placeholder="currentPage"
+              />
+            </div>
           </div>
-        </div>
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-center>
-      <v-flex id="result-count" xs12 sm10 md8>
-        <span v-if="$refs.paginator">
-          Viewing {{$refs.paginator.pageItemsCount}} results
-        </span>
-      </v-flex>
-    </v-layout>
+        </v-flex>
+      </v-layout>
+      <v-layout row justify-center>
+        <v-flex id="result-count" xs12 sm10 md8>
+          <span v-if="$refs.paginator">
+            Viewing {{$refs.paginator.pageItemsCount}} results
+          </span>
+        </v-flex>
+      </v-layout>
+    </div>
   </v-container>
 </template>
 
@@ -73,8 +76,9 @@ import Vue from 'vue';
 const VuePaginate = require('vue-paginate');
 Vue.use(VuePaginate);
 
-import Messages from './Messages.vue';
-import SearchResults from './SearchResults.vue';
+import Messages from './list/Messages.vue';
+import SearchResults from './list/SearchResults.vue';
+import Loading from './common/Loading.vue';
 const { messagesPerPage } = require('../config');
 
 export default {
@@ -107,6 +111,7 @@ export default {
   components: {
     Messages,
     SearchResults,
+    Loading,
   },
   mounted() {
     axios.get('http://localhost:5000/all_detailed')
